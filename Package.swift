@@ -15,13 +15,11 @@ let package = Package(
             targets: ["BCTags"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/BlockchainCommons/URKit", from: "14.0.0"),    
     ],
     targets: [
         .target(
             name: "BCTags",
             dependencies: [
-                "URKit"
             ]
         ),
         .testTarget(
