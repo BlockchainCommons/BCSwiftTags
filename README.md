@@ -1,3 +1,3 @@
-# BCSwiftKeys
+# BCSwiftTags
 
 Registry of CBOR tags in use for Blockchain Commons projects.
