@@ -18,10 +18,12 @@ import Foundation
 /// Core Envelope tags.
 public extension Tag {
     /// See https://www.rfc-editor.org/rfc/rfc8949.html#name-encoded-cbor-data-item
-    static let leaf = Tag(24, "leaf")
+    /// See testReadLegacyLeaf
+    static let encodedCBOR = Tag(24, "encoded-cbor")
 
     /// Registered in https://www.iana.org/assignments/cbor-tags/cbor-tags.xhtml
     static let envelope = Tag(200, "envelope")
+    static let leaf = Tag(201, "leaf")
 }
 
 /// Envelope extension tags
@@ -148,6 +150,7 @@ public var knownTags: [Tag] = [
     .outputWitnessScriptHash,
     .parameter,
     .password,
+    .placeholder,
     .privateKeyBase,
     .psbt,
     .psbtV1,
@@ -157,7 +160,6 @@ public var knownTags: [Tag] = [
     .salt,
     .sealedMessage,
     .seed,
-//    .seedDigest,
     .seedV1,
     .signature,
     .signingPrivateKey,
