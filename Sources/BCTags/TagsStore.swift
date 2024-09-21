@@ -60,4 +60,4 @@ extension TagsStore: ExpressibleByArrayLiteral {
     }
 }
 
-public var globalTags = TagsStore()
+@MainActor public var globalTags = TagsStore()

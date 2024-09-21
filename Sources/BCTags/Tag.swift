@@ -1,7 +1,7 @@
 import Foundation
 
 /// A CBOR tag.
-public struct Tag {
+public struct Tag: Sendable {
     /// The tag's value.
     public let value: UInt64
     

@@ -107,13 +107,13 @@ public extension Tag {
     static let outputCosigner               = Tag(410, "output-cosigner") // Fixed
 }
 
-public func addKnownTags() {
+@MainActor public func addKnownTags() {
     knownTags.forEach {
         globalTags.insert($0)
     }
 }
 
-public var knownTags: [Tag] = [
+@MainActor public var knownTags: [Tag] = [
     .accountDescriptor,
     .accountV1,
     .address,
