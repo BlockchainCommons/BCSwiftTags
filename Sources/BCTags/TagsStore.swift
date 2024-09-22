@@ -13,9 +13,9 @@ public func name(for tag: Tag, knownTags: TagsStoreProtocol?) -> String {
 }
 
 /// A dictionary of mappings between tags and their names.
-public final class TagsStore: TagsStoreProtocol {
-    var tagsByValue: [UInt64: Tag]
-    var tagsByName: [String: Tag]
+public final class TagsStore: TagsStoreProtocol, @unchecked Sendable {
+    public private(set) var tagsByValue: [UInt64: Tag]
+    public private(set) var tagsByName: [String: Tag]
     
     public init<T>(_ tags: T) where T: Sequence, T.Element == Tag {
         tagsByValue = [:]
@@ -86,4 +86,4 @@ extension TagsStore: ExpressibleByArrayLiteral {
 }
 
 // Safe because the only mutating function is @MainActor.
-nonisolated(unsafe) public let globalTags = TagsStore()
+public let globalTags = TagsStore()
