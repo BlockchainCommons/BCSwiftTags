@@ -13,7 +13,7 @@ public func name(for tag: Tag, knownTags: TagsStoreProtocol?) -> String {
 }
 
 /// A dictionary of mappings between tags and their names.
-public struct TagsStore: TagsStoreProtocol {
+public final class TagsStore: TagsStoreProtocol {
     var tagsByValue: [UInt64: Tag]
     var tagsByName: [String: Tag]
     
@@ -25,7 +25,8 @@ public struct TagsStore: TagsStoreProtocol {
         }
     }
     
-    public mutating func insert(_ tag: Tag) {
+    @MainActor
+    public func insert(_ tag: Tag) {
         Self._insert(tag, tagsByValue: &tagsByValue, tagsByName: &tagsByName)
     }
     
@@ -54,10 +55,35 @@ public struct TagsStore: TagsStoreProtocol {
     }
 }
 
+// Conform to Sequence protocol to make TagsStore iterable.
+extension TagsStore: Sequence {
+    public func makeIterator() -> TagsIterator {
+        return TagsIterator(tagsByValue: tagsByValue)
+    }
+}
+
+// Iterator that iterates over tags in numeric order.
+public struct TagsIterator: IteratorProtocol {
+    private var sortedTags: [Tag]
+    private var currentIndex: Int = 0
+    
+    init(tagsByValue: [UInt64: Tag]) {
+        self.sortedTags = tagsByValue.values.sorted(by: { $0.value < $1.value })
+    }
+    
+    public mutating func next() -> Tag? {
+        guard currentIndex < sortedTags.count else { return nil }
+        let tag = sortedTags[currentIndex]
+        currentIndex += 1
+        return tag
+    }
+}
+
 extension TagsStore: ExpressibleByArrayLiteral {
-    public init(arrayLiteral elements: Tag...) {
+    public convenience init(arrayLiteral elements: Tag...) {
         self.init(elements)
     }
 }
 
-@MainActor public var globalTags = TagsStore()
+// Safe because the only mutating function is @MainActor.
+nonisolated(unsafe) public let globalTags = TagsStore()
